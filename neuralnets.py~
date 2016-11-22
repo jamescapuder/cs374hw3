@@ -1,0 +1,18 @@
+import tensorflow as tf
+import sys
+
+
+
+
+
+
+def main():
+    try:
+        fpath_ = sys.argv[1]
+        seed_ = sys.argv[2]
+        prop_ = sys.argv[3]
+        num_iters_ = sys.argv[4]
+        num_hidden_ = sys.argv[5]
+    except IndexError:
+        print("usage: python3 neuralnets.py <fpath><seed><proportion><num_iterations><num_hidden>")
+    
