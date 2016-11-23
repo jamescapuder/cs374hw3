@@ -1,12 +1,13 @@
-import tensorflow as tf
+import sklearn
+import pandas as pd
 import sys
 import csv
 import random
 import math
 
 def read_dat(datvect):
-    training = tf.contrib.learn.datasets.base.load_csv_with_header(filename=datvect[0],target_dtype=tf.string,features_dtype=tf.string)
-    testing = tf.contrib.learn.datasets.base.load_csv_with_header(filename=datvect[1], target_dtype=tf.string,features_dtype=tf.string)
+    training = pd.read_csv(datvect[0])
+    testing = pd.read_csv(datvect[1])
     print(training)
     print(testing)
 
@@ -22,18 +23,9 @@ def data_prep(fpath_, seed_, prop_):
             contain.append(row)
         random.seed(seed_)
         random.shuffle(contain)
-        train = contain[0:math.floor(prop_*len(contain))]
-        test = contain[math.floor(prop_*len(contain)):len(contain)-1]
-    with open(trainfile,'w') as file:
-        wr = csv.writer(file)
-        wr.writerow(header)
-        for i in train:
-            wr.writerow(i)
-    with open(testfile,'w') as file:
-        wr2 = csv.writer(file)
-        wr2.writerow(header)
-        for i in test:
-            wr2.writerow(i)
+        train = [header].extend(contain[0:math.floor(prop_*len(contain))])
+        test = [header].extend(contain[math.floor(prop_*len(contain)):len(contain)-1])
+        
     return [trainfile,testfile]
 
 def main():
