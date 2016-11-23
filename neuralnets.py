@@ -1,13 +1,14 @@
-import sklearn
+import numpy as np
 import pandas as pd
+import sklearn as sk
 import sys
 import csv
 import random
 import math
 
 def read_dat(datvect):
-    training = pd.read_csv(datvect[0])
-    testing = pd.read_csv(datvect[1])
+    training = pd.DataFrame(datvect[1], columns=datvect[0])
+    testing = pd.DataFrame(datvect[2], columns=datvect[0])
     print(training)
     print(testing)
 
@@ -23,10 +24,12 @@ def data_prep(fpath_, seed_, prop_):
             contain.append(row)
         random.seed(seed_)
         random.shuffle(contain)
-        train = [header].extend(contain[0:math.floor(prop_*len(contain))])
-        test = [header].extend(contain[math.floor(prop_*len(contain)):len(contain)-1])
-        
-    return [trainfile,testfile]
+        train = contain[0:math.floor(prop_*len(contain))]
+        test = contain[math.floor(prop_*len(contain)):len(contain)-1]
+    trainarray = np.array(train)
+    testarray = np.array(test)
+
+    return [header, trainarray, testarray]
 
 def main():
     try:
