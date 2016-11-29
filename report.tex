@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{fancyhdr}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat = 1.8}
+\usetikzlibrary{pgfplots.statistics}
+%\usepgfplotslibrary{statistics}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem*{lem}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem*{claim}{Claim}
+\newtheorem*{fclaim}{False Claim}
+\newtheorem{observation}{Observation}
+\newtheorem{conjecture}[lemma]{Conjecture}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem*{rt}{Running Time}
+
+
+
+
+\begin{document}
+
+\begin{center}
+\begin{tabular*}{6.5in}{l @{\extracolsep{\fill}}c r}
+\hline
+\hline
+\bfseries CS 374 & & \bfseries  Homework 3, Report\\ %%% UPDATE FOR EACH ASSIGNMENT/PROBLEM
+\bfseries Fall 2016  &   &  \bfseries James Capuder\\%%% YOUR NAME HERE
+\hline
+\hline
+\end{tabular*}
+\end{center} 
+
+
+
+
+
+%%% PLEASE PLACE THE HONOR CODE AND YOUR NAME/SIGNATURE HERE
+\noindent Honor Code: I affirm that I have adhered to the honor code in this assignment.
+
+
+
+
+
+\begin{tikzpicture}
+
+\begin{axis}[xtick=data,xtick align=center, xlabel={\% of data used for training},ylabel={Accuracy of model},grid = major]
+\addplot[scatter/classes={
+	.5={mark=square*,blue},%
+	.7={mark=triangle*,red},%
+	.8={mark=circle*,green},
+	.9={mark=o,draw=black,fill=black}
+}, scatter, only marks,scatter src=explicit symbolic] table[ x=proportion, y=accuracy, col sep=comma,meta=proportion]{exp4digit1.csv};
+\end{axis}
+\end{tikzpicture}\newline
+
+\begin{tikzpicture}
+\begin{axis}[xtick=data,xticklabel style={rotate=45}, xlabel={Number of iterations},ylabel={Accuracy of model},grid = major]
+\addplot[scatter/classes={
+	.5={mark=square*,blue},%
+	.7={mark=triangle*,red},%
+	.8={mark=circle*,green},
+	.9={mark=o,draw=black,fill=black}
+}, scatter, only marks,scatter src=explicit symbolic] table[ x=iterations, y=accuracy, col sep=comma,meta=proportion]{exp4digit2.csv};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[xtick=data,xticklabel style={rotate=45}, xlabel={Number of neurons in hidden layer},ylabel={Accuracy of model},grid = major]
+\addplot[scatter/classes={
+	.5={mark=square*,blue},%
+	.7={mark=triangle*,red},%
+	.8={mark=circle*,green},
+	.9={mark=o,draw=black,fill=black}
+}, scatter, only marks,scatter src=explicit symbolic] table[ x=hidden, y=accuracy, col sep=comma,meta=proportion]{exp3digit.csv};
+\end{axis}
+\end{tikzpicture}
+\end{document}
