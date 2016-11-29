@@ -8,23 +8,34 @@ import math
 from sklearn import datasets
 from sknn.mlp import Classifier, Layer
 
-def data_prep(seed_, prop_, num_hidden_):
-    iris = datasets.load_iris()
+def proc_tuple(data_tup):
+    count=0
+    for i in range(len(data_tup[0])):
+        if (data_tup[0][i]==data_tup[1][i]):
+            count+=1
+    ret = count/len(data_tup[0])
+    return ret
+    
+
+def data_prep(seed_, prop_, num_hidden_, num_iters_):
+    iris = datasets.load_digits()
     iris_targ = [[x] for x in iris.target]
+    #print(iris.data)
+    #print(iris_targ)
     x_train = np.concatenate((iris.data, iris_targ), 1)
     np.random.seed(seed_)
     np.random.shuffle(x_train)
-    iris_data = np.array([x[:3] for x in x_train])
-    iris_targ = np.array([x[4] for x in x_train])
+    iris_data = np.array([x[:62] for x in x_train])
+    iris_targ = np.array([x[63] for x in x_train])
     x = iris_data[:math.floor(len(iris_data)*prop_)]
     y = iris_targ[:math.floor(len(iris_targ)*prop_)]
-    nn = Classifier(layers=[Layer("Sigmoid", units = num_hidden_), Layer("Softmax")],learning_rate=0.001,n_iter=2000 )
+    nn = Classifier(layers=[Layer("Sigmoid", units = num_hidden_), Layer("Softmax")],learning_rate=0.001,n_iter=num_iters_ )
     nn.fit(x, y)
     y_test = iris_targ[math.floor(len(iris_targ)*prop_):]
     y_pred = nn.predict(iris_data[math.floor(len(iris_data)*prop_):])
     #pred_act = np.concatenate((y_test, y_pred), 1)
-    print(y_pred)
-    print(y_test)
+    return (y_pred.flatten().tolist(), y_test.tolist())
+    
     
 def main():
     try:
@@ -36,15 +47,30 @@ def main():
         #data_prep(seed_, prop_)
         #datar  = read_dat(setv)
         #pre_proc(setv,num_hidden_, fpath_,prop_,seed_)
-        exp_3()
+        exp_4()
     except IndexError:
         print("usage: python3 neuralnets.py <fpath><seed><proportion><num_iterations><num_hidden>")
 
 
-def exp_3():
-    for i in [5,10,20,50]:
-        for j in range(1,11):
-            print("hidden: %d, seed %d" %(i, j+80))
-            data_prep(j+80, .7, i)
+def exp_4():
+    exp_garb = {}
+    with open("exp_4_digit_2.csv",'w') as f:
+        wr = csv.writer(f)
+        wr.writerow(['iterations', 'proportion','seed', 'accuracy'])
+        for i in [1000,2000,5000,10000]:
+            temp = []
+            for j in range(1,11):
+                print("hidden: %d, seed %d" %(i, j+80))
+                #temp.append(data_prep(j+80, .7, i))
+                towrite = proc_tuple(data_prep(j+80, .7, 10, i))
+                wr.writerow([i, .7,j+80, towrite])
+                #print(proc_tuple(data_prep(j+8, .7, i, 1000)))
+            print("\a")
+        #print(map(proc_tuple, temp))
+        #exp_garb[i] = temp
+        #print(temp)
+    #for k,v in exp_garb.items():
+    #    print(map(proc_tuple, v))
+    print("\a")
 
 main()
