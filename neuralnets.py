@@ -22,7 +22,6 @@ def data_prep(fpath_, seed_, prop_, num_hidden_, num_iters_):
     iris = datasets.load_digits()
     iris_targ = [[x] for x in iris.target]
     insts = []
-
     with open(fpath_, 'r') as f:
         reader = csv.reader(f)
         keys = next(reader)
@@ -54,11 +53,20 @@ def main():
         prop_ = eval(sys.argv[3])
         num_iters_ = eval(sys.argv[4])
         num_hidden_ = eval(sys.argv[5])
-        tupuru = data_prep(fpath_, seed_, prop_,num_iters_, num_hidden_)
-        
+        #tupuru = data_prep(fpath_, seed_, prop_,num_iters_, num_hidden_)
+        exp_1()
     except IndexError:
         print("usage: python3 neuralnets.py <fpath><seed><proportion><num_iterations><num_hidden>")
 
+def exp_1():
+    with open("exp1monks.csv", 'w') as f:
+        wr = csv.writer(f)
+        wr.writerow(['seed', 'accuracy'])
+        for i in range(480,510):
+            print(i)
+            towrite = proc_tuple(data_prep("monks1.csv", i, .7, 20,5000))
+            wr.writerow([i,towrite])
+            print("\a")
 
 def exp_4():
     exp_garb = {}
