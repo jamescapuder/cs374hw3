@@ -51,23 +51,45 @@
 
 
 
-
+\begin{figure}[h]
+\centering
 \begin{tikzpicture}
-
 \begin{axis}[xtick=data,xtick align=center, xlabel={\% of data used for training},ylabel={Accuracy of model},grid = major, ymin = .9, ymax=1, ytick={.90,.91,.92,.93,.94,.95,.96,.97,.98,.99,1}]
 \addplot[scatter] table[ x=proportion, y=accuracy, col sep=comma]{exp2p1.csv};
 \end{axis}
-\end{tikzpicture}\newline
+\end{tikzpicture}
+\caption{Average accuracy of models trained with different proportions of the data set.}
+\end{figure}
 
+\begin{figure}[h]
+\centering
 \begin{tikzpicture}
 \begin{axis}[xtick=data,xticklabel style={rotate=45}, xlabel={Number of iterations},ylabel={Accuracy of model},grid = major,ymin = .9, ymax=1, ytick={.90,.91,.92,.93,.94,.95,.96,.97,.98,.99,1}]
 \addplot[scatter] table[ x=iterations, y=accuracy, col sep=comma]{exp2p2.csv};
 \end{axis}
 \end{tikzpicture}
+\caption{Average accuracy of networks trained with varying number of iterations}
+\end{figure}
 
+
+
+
+\begin{figure}
+\centering
 \begin{tikzpicture}
 \begin{axis}[xtick=data,xticklabel style={rotate=45}, xlabel={Number of neurons in hidden layer},ylabel={Accuracy of model},grid = major,ymin = .9, ymax=1, ytick={.90,.91,.92,.93,.94,.95,.96,.97,.98,.99,1}]
 \addplot[scatter] table[ x=hidden, y=accuracy, col sep=comma]{exp3avg.csv};
 \end{axis}
 \end{tikzpicture}
+\caption{Average accuracy of networks trained with varying number of hidden neurons}
+\end{figure}
+
+
+
+
+
+
+
+
+
 \end{document}
