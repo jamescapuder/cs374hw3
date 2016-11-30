@@ -6,6 +6,7 @@ import csv
 import random
 import math
 from sklearn import datasets
+from sklearn.feature_extraction import DictVectorizer as DV
 from sknn.mlp import Classifier, Layer
 
 def proc_tuple(data_tup):
@@ -17,25 +18,34 @@ def proc_tuple(data_tup):
     return ret
     
 
-def data_prep(seed_, prop_, num_hidden_, num_iters_):
+def data_prep(fpath_, seed_, prop_, num_hidden_, num_iters_):
     iris = datasets.load_digits()
     iris_targ = [[x] for x in iris.target]
-    #print(iris.data)
-    #print(iris_targ)
-    x_train = np.concatenate((iris.data, iris_targ), 1)
+    insts = []
+
+    with open(fpath_, 'r') as f:
+        reader = csv.reader(f)
+        keys = next(reader)
+        for row in reader:
+            temp = {}
+            for i in range(len(row)):
+                temp[keys[i]] = row[i]
+            insts.append(temp)
+    #print(insts)
+    vectorizer = DV( sparse = False )
+    one_hot = vectorizer.fit_transform(insts)
     np.random.seed(seed_)
-    np.random.shuffle(x_train)
-    iris_data = np.array([x[:62] for x in x_train])
-    iris_targ = np.array([x[63] for x in x_train])
-    x = iris_data[:math.floor(len(iris_data)*prop_)]
-    y = iris_targ[:math.floor(len(iris_targ)*prop_)]
+    np.random.shuffle(one_hot)
+    attrs = np.array([x[1:] for x in one_hot])
+    labs = np.array([x[0] for x in one_hot])
+    x = attrs[:math.floor(len(attrs)*prop_)]
+    y = labs[:math.floor(len(labs)*prop_)]
     nn = Classifier(layers=[Layer("Sigmoid", units = num_hidden_), Layer("Softmax")],learning_rate=0.001,n_iter=num_iters_ )
     nn.fit(x, y)
-    y_test = iris_targ[math.floor(len(iris_targ)*prop_):]
-    y_pred = nn.predict(iris_data[math.floor(len(iris_data)*prop_):])
+    y_test = labs[math.floor(len(labs)*prop_):]
+    y_pred = nn.predict(attrs[math.floor(len(attrs)*prop_):])
     #pred_act = np.concatenate((y_test, y_pred), 1)
     return (y_pred.flatten().tolist(), y_test.tolist())
-    
     
 def main():
     try:
@@ -44,10 +54,8 @@ def main():
         prop_ = eval(sys.argv[3])
         num_iters_ = eval(sys.argv[4])
         num_hidden_ = eval(sys.argv[5])
-        #data_prep(seed_, prop_)
-        #datar  = read_dat(setv)
-        #pre_proc(setv,num_hidden_, fpath_,prop_,seed_)
-        exp_4()
+        tupuru = data_prep(fpath_, seed_, prop_,num_iters_, num_hidden_)
+        
     except IndexError:
         print("usage: python3 neuralnets.py <fpath><seed><proportion><num_iterations><num_hidden>")
 
